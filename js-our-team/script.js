@@ -93,17 +93,11 @@ formAddMember.addEventListener("submit", (e) => {
         img,
     };
 
+    // Anche se l'array di object teamMembers è una variabile const, con push posso aggiornarne il contenuto, aggiungendo un nuovo object.
     teamMembers.push(newMember);
 
     loadMembers(teamMembers);
+
+    // Reset del form dopo submit
+    e.target.reset();
 });
-
-// for (const key in object) {
-//   if (!Object.hasOwn(object, key)) continue;
-
-//   const element = object[key];
-
-//   for (const element of object) {
-
-//   }
-// }
