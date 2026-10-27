@@ -72,7 +72,8 @@ function loadMembers(members) {
 
 loadMembers(teamMembers);
 
-formAddMember.addEventListener("submit", (e) => {
+// formAddMember.addEventListener("submit", (e) => {
+function onSubmit(e) {
     e.preventDefault();
     // console.log("Ho cliccato su Add Member");
 
@@ -100,4 +101,7 @@ formAddMember.addEventListener("submit", (e) => {
 
     // Reset del form dopo submit
     e.target.reset();
-});
+}
+// });
+
+formAddMember.addEventListener("submit", onSubmit);
