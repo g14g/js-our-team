@@ -1,4 +1,10 @@
-const teamMembers = [
+// Metodo funzionante 1
+// import { Tooltip } from "https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js";
+
+// Metodo funzinante 2
+import * as bootstrap from "https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js";
+
+let teamMembers = [
     {
         name: "Marco Bianchi",
         role: "Designer",
@@ -43,7 +49,8 @@ const formAddMember = document.querySelector("#form-add-member");
 function renderMemberCards(member) {
     return `
     <div class="col md:col-6 xl:col-4">
-        <div class="card card-row">
+        <div class="card card-row position-relative">
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close" data-bs-toggle="tooltip" data-bs-title="Remove Member" data-bs-config="{'trigger':'hover'}" data-member-name="${member.name}"></button>
             <img class="card-img-start w-8 ratio-1x1 object-fit-cover" src="./${member.img}" alt="${member.name}" />
             <div class="card-body p-0 ps-6 justify-content-center">
                 <h4 class="card-title text-uppercase">${member.name}</h4>
@@ -60,7 +67,7 @@ function loadMembers(members) {
     let htmlCard = "";
 
     for (const member of members) {
-        console.log(member.name);
+        // console.log(member.name);
 
         // teamList.innerHTML += renderMemberCards(member);
 
@@ -69,8 +76,6 @@ function loadMembers(members) {
 
     teamList.innerHTML = htmlCard;
 }
-
-loadMembers(teamMembers);
 
 // formAddMember.addEventListener("submit", (e) => {
 function onSubmit(e) {
@@ -97,6 +102,8 @@ function onSubmit(e) {
     // Anche se l'array di object teamMembers è una variabile const, con push posso aggiornarne il contenuto, aggiungendo un nuovo object.
     teamMembers.push(newMember);
 
+    localStorage.setItem("teamMembers", JSON.stringify(teamMembers));
+
     loadMembers(teamMembers);
 
     // Reset del form dopo submit
@@ -104,4 +111,39 @@ function onSubmit(e) {
 }
 // });
 
+const localTeamMembers = JSON.parse(localStorage.getItem("teamMembers"));
+
+if (localTeamMembers !== null) {
+    teamMembers = localTeamMembers;
+    localStorage.setItem("teamMembers", JSON.stringify(teamMembers));
+    console.log("teamMembers è presente in Local Storage");
+} else {
+    console.log("teamMembers non è presente in Local Storage");
+}
+
+loadMembers(teamMembers);
+
 formAddMember.addEventListener("submit", onSubmit);
+
+teamList.addEventListener("click", (e) => {
+    // console.log(e.target);
+    if (e.target.classList.contains("btn-close")) {
+
+        // Metodo 1 funzionante
+        // const tooltip = Tooltip.getOrCreateInstance(e.target);
+
+        // Metodo 2 funzionante
+        const tooltip = bootstrap.Tooltip.getOrCreateInstance(e.target);
+
+        if (tooltip) {
+            tooltip.dispose();
+        }
+
+        const cardMemberName = e.target.dataset.memberName;
+        const index = teamMembers.findIndex((member) => member.name === cardMemberName);
+        console.log(`Member Name: ${cardMemberName} all'idice dell'array: ${index}`);
+        teamMembers.splice(index, 1);
+        localStorage.setItem("teamMembers", JSON.stringify(teamMembers));
+        loadMembers(teamMembers);
+    }
+});

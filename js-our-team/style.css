@@ -9,6 +9,10 @@ body {
     height: 100%;
 } */
 
+:root {
+    --bs-body-font-family: "Fredoka", sans-serif;
+}
+
 body {
     font-family: "Fredoka", sans-serif;
     background-color: #121212;
